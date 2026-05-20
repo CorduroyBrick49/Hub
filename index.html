@@ -11,23 +11,39 @@
       />
 
       <style>
+         /* =========================
+   RESET + ROOT VARIABLES
+========================= */
          * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
          }
 
+         :root {
+            --bg: linear-gradient(135deg, #0b0b12, #141427, #1a1330);
+            --card: rgba(20, 20, 35, 0.7);
+            --border: rgba(168, 85, 247, 0.25);
+            --text: #ffffff;
+            --muted: #cbd5e1;
+            --accent1: #a855f7;
+            --accent2: #6366f1;
+         }
+
+         /* =========================
+   BODY
+========================= */
          body {
             font-family: "Inter", sans-serif;
             min-height: 100vh;
             display: flex;
-
-            /* PURPLE + DARK GREY THEME */
-            background: linear-gradient(135deg, #0b0b12, #141427, #1a1330);
-            color: #ffffff;
+            background: var(--bg);
+            color: var(--text);
          }
 
-         /* SIDEBAR */
+         /* =========================
+   SIDEBAR
+========================= */
          .sidebar {
             width: 270px;
             padding: 20px;
@@ -35,10 +51,10 @@
             top: 0;
             height: 100vh;
 
-            background: rgba(20, 20, 35, 0.7);
+            background: var(--card);
             backdrop-filter: blur(14px);
 
-            border-right: 1px solid rgba(168, 85, 247, 0.25);
+            border-right: 1px solid var(--border);
 
             display: flex;
             flex-direction: column;
@@ -48,23 +64,27 @@
          .logo {
             font-size: 1.8rem;
             font-weight: 800;
-            background: linear-gradient(to right, #a855f7, #6366f1);
+            background: linear-gradient(135deg, var(--accent1), var(--accent2));
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
          }
 
-         /* SEARCH */
+         /* =========================
+   SEARCH
+========================= */
          .search {
             padding: 12px;
             border-radius: 12px;
-            border: 1px solid rgba(168, 85, 247, 0.25);
+            border: 1px solid var(--border);
             outline: none;
 
-            background: rgba(0, 0, 0, 0.3);
-            color: white;
+            background: rgba(0, 0, 0, 0.25);
+            color: var(--text);
          }
 
-         /* GENRES */
+         /* =========================
+   GENRE FILTERS
+========================= */
          .genres {
             display: flex;
             flex-wrap: wrap;
@@ -74,28 +94,71 @@
          .genre-btn {
             padding: 6px 10px;
             border-radius: 999px;
-            border: 1px solid rgba(168, 85, 247, 0.25);
+            border: 1px solid var(--border);
             cursor: pointer;
             font-size: 0.75rem;
 
             background: rgba(0, 0, 0, 0.2);
-            color: #cbd5e1;
+            color: var(--muted);
 
             transition: 0.2s;
          }
 
          .genre-btn:hover {
             transform: translateY(-2px);
-            border-color: #a855f7;
+            border-color: var(--accent1);
          }
 
          .genre-btn.active {
-            background: linear-gradient(135deg, #a855f7, #6366f1);
-            color: white;
+            background: linear-gradient(135deg, var(--accent1), var(--accent2));
+            color: var(--text);
             border: none;
+            box-shadow: 0 6px 18px rgba(0, 0, 0, 0.25);
+         }
+         .favorite-btn {
+            width: 22px;
+            height: 22px;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            font-size: 14px;
+            line-height: 1;
+
+            background: rgba(0, 0, 0, 0.25);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            color: rgba(255, 255, 255, 0.7);
+
+            border-radius: 6px;
+
+            cursor: pointer;
+            transition: 0.2s ease;
+
+            backdrop-filter: blur(6px);
          }
 
-         /* MAIN */
+         .favorite-btn:hover {
+            transform: scale(1.1);
+            border-color: var(--accent1);
+            color: white;
+            background: rgba(0, 0, 0, 0.4);
+         }
+
+         .favorite-btn.active {
+            color: #ffd54a;
+            border-color: rgba(255, 213, 74, 0.6);
+            background: rgba(255, 213, 74, 0.15);
+         }
+         .card-topbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 8px;
+         }
+         /* =========================
+   MAIN
+========================= */
          .main {
             flex: 1;
             padding: 35px;
@@ -104,14 +167,17 @@
          .header h1 {
             font-size: 3rem;
             font-weight: 800;
+            color: var(--text);
          }
 
          .header p {
-            color: #cbd5e1;
+            color: var(--muted);
             margin-top: 8px;
          }
 
-         /* GRID */
+         /* =========================
+   GRID
+========================= */
          .container {
             margin-top: 25px;
             display: grid;
@@ -119,46 +185,41 @@
             gap: 18px;
          }
 
-         /* CARD */
+         /* =========================
+   GAME CARD (BOX)
+========================= */
          .box {
+            position: relative;
+            overflow: hidden;
+
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            min-height: 220px;
+            height: 100%;
+
             background: rgba(20, 20, 35, 0.7);
             border: 1px solid rgba(168, 85, 247, 0.2);
             border-radius: 18px;
             padding: 18px;
 
             backdrop-filter: blur(10px);
-
             transition: 0.25s;
          }
 
          .box:hover {
             transform: translateY(-6px);
-            border-color: #a855f7;
-            box-shadow: 0 10px 30px rgba(168, 85, 247, 0.15);
+            border-color: var(--accent1);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
          }
 
-         .box h3 {
-            font-size: 1.2rem;
-            margin-bottom: 6px;
-         }
-
-         .box p {
-            color: #cbd5e1;
-            font-size: 0.9rem;
-            margin-bottom: 10px;
-         }
-         .box {
-            position: relative;
-            overflow: hidden;
-         }
-
-         /* dark overlay */
+         /* overlay */
          .box::before {
             content: "";
             position: absolute;
             inset: 0;
-            background: rgba(0, 0, 0, 0.55);
             z-index: 0;
+            background: rgba(0, 0, 0, 0.55);
          }
 
          /* keep text above overlay */
@@ -166,6 +227,25 @@
             position: relative;
             z-index: 1;
          }
+
+         /* =========================
+   BOX TEXT
+========================= */
+         .box h3 {
+            font-size: 1.2rem;
+            margin-bottom: 6px;
+            color: white;
+         }
+
+         .box p {
+            color: #cbd5e1;
+            font-size: 0.9rem;
+            margin-bottom: 10px;
+         }
+
+         /* =========================
+   GENRE TAG
+========================= */
          .genre-tag {
             display: inline-block;
             font-size: 0.7rem;
@@ -173,36 +253,114 @@
             border-radius: 999px;
             margin-bottom: 8px;
 
-            background: rgba(168, 85, 247, 0.15);
-            color: #c4b5fd;
-            border: 1px solid rgba(168, 85, 247, 0.25);
+            background: rgba(0, 0, 0, 0.2);
+            color: var(--muted);
+            border: 1px solid var(--border);
+
+            transition: 0.2s ease;
          }
 
-         /* BUTTON */
-         .box button {
+         /* =========================
+   BUTTON
+========================= */
+
+         .box > button:not(.favorite-btn) {
             width: 100%;
+            margin-top: auto;
+
             padding: 10px;
-            border: none;
             border-radius: 10px;
+            border: 1px solid var(--border);
+
             font-weight: 700;
             cursor: pointer;
 
-            background: linear-gradient(135deg, #a855f7, #6366f1);
-            color: white;
+            background: linear-gradient(135deg, var(--accent1), var(--accent2));
+            color: var(--text);
+
+            backdrop-filter: blur(10px);
+            transition: 0.2s ease;
+         }
+         .box button:hover {
+            transform: translateY(-2px);
+            filter: brightness(1.15);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
          }
 
-         .box button:hover {
-            filter: brightness(1.1);
+         .box button:active {
+            transform: translateY(0px);
+            filter: brightness(0.95);
          }
-         .box {
+
+         /* =========================
+   THEME UI
+========================= */
+         .theme-title {
+            font-size: 0.8rem;
+            color: #888;
+            margin-top: 10px;
+         }
+
+         .themes {
             display: flex;
             flex-direction: column;
-            justify-content: space-between;
-            height: 100%;
-            min-height: 220px;
+            gap: 6px;
          }
-         .box button {
-            margin-top: auto;
+
+         .theme-btn {
+            padding: 8px;
+            border-radius: 10px;
+            border: 1px solid var(--border);
+
+            background: rgba(0, 0, 0, 0.2);
+            color: var(--muted);
+
+            cursor: pointer;
+            transition: 0.2s;
+         }
+
+         .theme-btn:hover {
+            transform: translateX(3px);
+            border-color: var(--accent1);
+         }
+
+         .theme-btn.active {
+            background: linear-gradient(135deg, var(--accent1), var(--accent2));
+            color: white;
+            border: none;
+         }
+         .theme-btn {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+         }
+         .fav-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+
+            padding: 8px;
+            border-radius: 10px;
+            border: 1px solid var(--border);
+
+            background: rgba(0, 0, 0, 0.2);
+            color: var(--muted);
+
+            cursor: pointer;
+            transition: 0.2s;
+         }
+
+         /* ONLY favorites get star */
+         .fav-item::before {
+            content: "★";
+            color: var(--accent1);
+            font-size: 0.9rem;
+            opacity: 0.9;
+         }
+
+         .fav-item:hover {
+            transform: translateX(3px);
+            border-color: var(--accent1);
          }
       </style>
    </head>
@@ -215,6 +373,31 @@
          <input class="search" id="search" placeholder="Search games..." />
 
          <div class="genres" id="genreBar"></div>
+         <hr
+            style="
+               border: none;
+               border-top: 1px solid rgba(255, 255, 255, 0.1);
+               margin: 10px 0;
+            "
+         />
+
+         <div class="theme-title">Theme</div>
+
+         <div class="themes" id="themeBar">
+            <button class="theme-btn active" data-theme="dark">Dark</button>
+            <button class="theme-btn" data-theme="light">Light</button>
+            <button class="theme-btn" data-theme="neon">Neon</button>
+         </div>
+         <hr
+            style="
+               border: none;
+               border-top: 1px solid rgba(255, 255, 255, 0.1);
+               margin: 10px 0;
+            "
+         />
+
+         <div class="theme-title">Favorites</div>
+         <div class="themes" id="favoritesBar"></div>
       </div>
 
       <!-- MAIN -->
@@ -479,13 +662,111 @@
                image: "https://github.com/CorduroyBrick49/Games/blob/main/Images/2048.jpg?raw=true",
             },
          ];
-
          const container = document.getElementById("boxContainer");
          const search = document.getElementById("search");
          const genreBar = document.getElementById("genreBar");
+         const favoritesBar = document.getElementById("favoritesBar");
 
          let activeGenre = "All";
-         let boxes = [];
+         let favorites = JSON.parse(localStorage.getItem("favorites")) || [];
+
+         /* THEME SYSTEM */
+         const themeBtns = document.querySelectorAll(".theme-btn");
+
+         const themes = {
+            dark: {
+               bg: "linear-gradient(135deg, #0b0b12, #141427, #1a1330)",
+               card: "rgba(20, 20, 35, 0.7)",
+               border: "rgba(168, 85, 247, 0.25)",
+               text: "#ffffff",
+               muted: "#cbd5e1",
+               accent1: "#a855f7",
+               accent2: "#6366f1",
+            },
+            light: {
+               bg: "linear-gradient(135deg, #f7f8fc, #eef1f7)",
+               card: "rgba(255, 255, 255, 0.75)",
+               border: "rgba(99, 102, 241, 0.15)",
+               text: "#1f2937",
+               muted: "#4b5563",
+               accent1: "#6366f1",
+               accent2: "#8b5cf6",
+            },
+            neon: {
+               bg: "linear-gradient(135deg, #050508, #0b0b12)",
+               card: "rgba(10, 15, 25, 0.75)",
+               border: "rgba(0, 255, 255, 0.25)",
+               text: "#e2ffff",
+               muted: "#7ffcff",
+               accent1: "#00f5ff",
+               accent2: "#ff3df2",
+            },
+         };
+
+         function applyTheme(name) {
+            const t = themes[name];
+
+            document.documentElement.style.setProperty("--bg", t.bg);
+            document.documentElement.style.setProperty("--card", t.card);
+            document.documentElement.style.setProperty("--border", t.border);
+            document.documentElement.style.setProperty("--text", t.text);
+            document.documentElement.style.setProperty("--muted", t.muted);
+            document.documentElement.style.setProperty("--accent1", t.accent1);
+            document.documentElement.style.setProperty("--accent2", t.accent2);
+
+            localStorage.setItem("theme", name);
+
+            themeBtns.forEach((b) => b.classList.remove("active"));
+            document
+               .querySelector(`[data-theme="${name}"]`)
+               .classList.add("active");
+         }
+
+         themeBtns.forEach((btn) => {
+            btn.onclick = () => applyTheme(btn.dataset.theme);
+         });
+
+         applyTheme(localStorage.getItem("theme") || "dark");
+
+         /* FAVORITES */
+         function saveFavorites() {
+            localStorage.setItem("favorites", JSON.stringify(favorites));
+            renderFavorites();
+         }
+
+         function toggleFavorite(item) {
+            const index = favorites.findIndex((f) => f.name === item.name);
+
+            if (index === -1) {
+               favorites.push(item);
+            } else {
+               favorites.splice(index, 1);
+            }
+
+            saveFavorites();
+         }
+
+         function renderFavorites() {
+            favoritesBar.innerHTML = "";
+
+            if (favorites.length === 0) {
+               favoritesBar.innerHTML = `<div style="color:#777;font-size:0.8rem;">No favorites yet</div>`;
+               return;
+            }
+
+            favorites.forEach((item) => {
+               const btn = document.createElement("button");
+
+               // 👇 IMPORTANT: separate class
+               btn.className = "fav-item";
+
+               btn.textContent = item.name;
+
+               btn.onclick = () => window.open(item.url, "_blank");
+
+               favoritesBar.appendChild(btn);
+            });
+         }
 
          /* GENRES */
          const genres = ["All", ...new Set(data.map((g) => g.genre))];
@@ -512,32 +793,43 @@
          /* RENDER */
          function render(list) {
             container.innerHTML = "";
-            boxes = [];
 
             list.forEach((item) => {
                const box = document.createElement("div");
                box.className = "box";
 
                box.style.background = `
-  linear-gradient(rgba(0,0,0,0.55), rgba(0,0,0,0.55)),
-  url(${item.image})
-`;
+         linear-gradient(rgba(0,0,0,0.55), rgba(0,0,0,0.55)),
+         url(${item.image})
+      `;
                box.style.backgroundSize = "cover";
                box.style.backgroundPosition = "center";
-               box.style.backgroundRepeat = "no-repeat";
+
+               const isFav = favorites.some((f) => f.name === item.name);
+
                box.innerHTML = `
-  <div class="top">
-    <div class="genre-tag">${item.genre}</div>
-    <h3>${item.name}</h3>
-    <p>${item.description}</p>
-  </div>
+         <div class="top">
+            <div class="card-topbar">
+               <div class="genre-tag">${item.genre}</div>
+               <button class="favorite-btn ${isFav ? "active" : ""}">★</button>
+            </div>
 
-  <button>Launch Game</button>
-`;
+            <h3>${item.name}</h3>
+            <p>${item.description}</p>
+         </div>
 
-               const button = box.querySelector("button");
+         <button>Launch Game</button>
+      `;
 
-               button.onclick = async () => {
+               const favBtn = box.querySelector(".favorite-btn");
+               favBtn.onclick = (e) => {
+                  e.stopPropagation();
+                  toggleFavorite(item);
+                  applyFilters();
+               };
+
+               const launch = box.querySelector("button:not(.favorite-btn)");
+               launch.onclick = async () => {
                   const res = await fetch(item.url);
                   let html = await res.text();
 
@@ -558,29 +850,29 @@
                };
 
                container.appendChild(box);
-               boxes.push({ box, item });
             });
          }
+         /* FILTERS */
+         function applyFilters() {
+            const q = search.value.toLowerCase();
 
-         /* FILTER */
- function applyFilters(){
-  const q = search.value.toLowerCase();
+            const filtered = data.filter((item) => {
+               const match =
+                  item.name.toLowerCase().includes(q) ||
+                  item.description.toLowerCase().includes(q) ||
+                  item.genre.toLowerCase().includes(q);
 
-  const filtered = data.filter(item => {
-    const match =
-      item.name.toLowerCase().includes(q) ||
-      item.description.toLowerCase().includes(q) ||
-      item.genre.toLowerCase().includes(q);
+               const ok = activeGenre === "All" || item.genre === activeGenre;
 
-    const ok = activeGenre === "All" || item.genre === activeGenre;
+               return match && ok;
+            });
 
-    return match && ok;
-  });
+            render(filtered);
+         }
 
-  render(filtered);
-}
          search.addEventListener("input", applyFilters);
 
+         renderFavorites();
          render(data);
       </script>
    </body>
