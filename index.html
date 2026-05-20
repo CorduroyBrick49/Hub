@@ -5,10 +5,7 @@
       <meta name="viewport" content="width=device-width, initial-scale=1.0" />
       <title>Game Hub</title>
 
-      <link
-         href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap"
-         rel="stylesheet"
-      />
+      <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
 
       <style>
          /* =========================
@@ -34,13 +31,16 @@
    BODY
 ========================= */
          body {
-            font-family: "Inter", sans-serif;
+            font-family: "DM Sans", system-ui, -apple-system, sans-serif;
             min-height: 100vh;
             display: flex;
             background: var(--bg);
             color: var(--text);
          }
-
+body {
+   -webkit-font-smoothing: antialiased;
+   -moz-osx-font-smoothing: grayscale;
+}
          /* =========================
    SIDEBAR
 ========================= */
@@ -351,17 +351,23 @@
          }
 
          /* ONLY favorites get star */
-         .fav-item::before {
-            content: "★";
-            color: var(--accent1);
-            font-size: 0.9rem;
-            opacity: 0.9;
-         }
+.fav-item {
+   display: block;
+   padding: 8px;
+   border-radius: 10px;
+   border: 1px solid var(--border);
 
-         .fav-item:hover {
-            transform: translateX(3px);
-            border-color: var(--accent1);
-         }
+   background: rgba(0,0,0,0.2);
+   color: var(--muted);
+
+   cursor: pointer;
+   transition: 0.2s;
+}
+
+.fav-item:hover {
+   transform: translateX(3px);
+   border-color: var(--accent1);
+}
       </style>
    </head>
 
@@ -762,7 +768,25 @@
 
                btn.textContent = item.name;
 
-               btn.onclick = () => window.open(item.url, "_blank");
+               btn.onclick = async () => {
+   const res = await fetch(item.url);
+   let html = await res.text();
+
+   const base = item.url.slice(0, item.url.lastIndexOf("/") + 1);
+
+   if (/<head/i.test(html)) {
+      html = html.replace(
+         /<head([^>]*)>/i,
+         `<head$1><base href="${base}">`
+      );
+   } else {
+      html = `<head><base href="${base}"></head>` + html;
+   }
+
+   const w = window.open("about:blank");
+   w.document.write(html);
+   w.document.close();
+};
 
                favoritesBar.appendChild(btn);
             });
