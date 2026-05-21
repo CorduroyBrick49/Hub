@@ -5,11 +5,13 @@
       <meta name="viewport" content="width=device-width, initial-scale=1.0" />
       <title>Game Hub</title>
 
+      <!-- Google Font -->
       <link
          href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&display=swap"
          rel="stylesheet"
       />
 
+      <!-- ===================== CSS ===================== -->
       <style>
          /* =========================
    RESET + ROOT VARIABLES
@@ -30,7 +32,9 @@
             --accent2: #6366f1;
          }
 
-         /* smooth transitions for EVERYTHING theme-related */
+         /* =========================
+   GLOBAL TRANSITIONS
+========================= */
          body,
          .box,
          .sidebar,
@@ -55,11 +59,15 @@
             display: flex;
             background: var(--bg);
             color: var(--text);
-         }
-         body {
+
             -webkit-font-smoothing: antialiased;
             -moz-osx-font-smoothing: grayscale;
+
+            transition:
+               background 0.5s ease,
+               color 0.5s ease;
          }
+
          /* =========================
    SIDEBAR
 ========================= */
@@ -72,7 +80,6 @@
 
             background: var(--card);
             backdrop-filter: blur(14px);
-
             border-right: 1px solid var(--border);
 
             display: flex;
@@ -86,6 +93,24 @@
             background: linear-gradient(135deg, var(--accent1), var(--accent2));
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
+         }
+
+         /* =========================
+   MAIN CONTENT
+========================= */
+         .main {
+            flex: 1;
+            padding: 35px;
+         }
+
+         .header h1 {
+            font-size: 3rem;
+            font-weight: 800;
+         }
+
+         .header p {
+            color: var(--muted);
+            margin-top: 8px;
          }
 
          /* =========================
@@ -135,12 +160,10 @@
             background: linear-gradient(135deg, var(--accent1), var(--accent2));
             color: var(--text);
             border: none;
-            box-shadow: 0 6px 18px rgba(0, 0, 0, 0.25);
-            transform: translateY(1px) scale(0.97);
-            transform: scale(1.05);
          }
+
          /* =========================
-   FAVORITES FILTERS
+   FAVORITES BUTTON (CARD)
 ========================= */
          .favorite-btn {
             width: 22px;
@@ -158,10 +181,9 @@
             color: rgba(255, 255, 255, 0.7);
 
             border-radius: 6px;
-
             cursor: pointer;
-            transition: 0.2s ease;
 
+            transition: 0.2s ease;
             backdrop-filter: blur(6px);
          }
 
@@ -177,29 +199,26 @@
             border-color: rgba(255, 213, 74, 0.6);
             background: rgba(255, 213, 74, 0.15);
          }
-         .card-topbar {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 8px;
-         }
+
          /* =========================
-   MAIN
+   FAVORITES LIST
 ========================= */
-         .main {
-            flex: 1;
-            padding: 35px;
-         }
+         .fav-item {
+            display: block;
+            padding: 8px;
+            border-radius: 10px;
+            border: 1px solid var(--border);
 
-         .header h1 {
-            font-size: 3rem;
-            font-weight: 800;
-            color: var(--text);
-         }
-
-         .header p {
+            background: rgba(0, 0, 0, 0.2);
             color: var(--muted);
-            margin-top: 8px;
+
+            cursor: pointer;
+            transition: 0.2s;
+         }
+
+         .fav-item:hover {
+            transform: translateX(3px);
+            border-color: var(--accent1);
          }
 
          /* =========================
@@ -222,20 +241,25 @@
             display: flex;
             flex-direction: column;
             justify-content: space-between;
-            min-height: 220px;
-            height: 100%;
 
-            background: rgba(20, 20, 35, 0.7);
-            border: 1px solid rgba(168, 85, 247, 0.2);
-            border-radius: 18px;
+            min-height: 220px;
             padding: 18px;
 
+            border-radius: 18px;
+            border: 1px solid rgba(168, 85, 247, 0.2);
+
+            background: rgba(20, 20, 35, 0.7);
             backdrop-filter: blur(10px);
-            transition: 0.25s;
+
+            transition:
+               transform 0.25s ease,
+               box-shadow 0.25s ease,
+               filter 0.25s ease;
          }
 
          .box:hover {
-            transform: translateY(-6px);
+            transform: translateY(-8px) scale(1.01);
+            filter: brightness(1.15);
             border-color: var(--accent1);
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
          }
@@ -245,29 +269,37 @@
             content: "";
             position: absolute;
             inset: 0;
-            z-index: 0;
             background: rgba(0, 0, 0, 0.55);
          }
 
-         /* keep text above overlay */
+         /* keep content above overlay */
          .box * {
             position: relative;
             z-index: 1;
          }
 
          /* =========================
-   BOX TEXT
+   CARD TEXT
 ========================= */
          .box h3 {
             font-size: 1.2rem;
             margin-bottom: 6px;
-            color: white;
          }
 
          .box p {
-            color: #cbd5e1;
+            color: var(--muted);
             font-size: 0.9rem;
             margin-bottom: 10px;
+         }
+
+         /* =========================
+   TOP BAR
+========================= */
+         .card-topbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 8px;
          }
 
          /* =========================
@@ -278,22 +310,19 @@
             font-size: 0.7rem;
             padding: 4px 8px;
             border-radius: 999px;
-            margin-bottom: 8px;
 
             border: 1px solid var(--border);
             color: var(--muted);
 
             background: color-mix(in srgb, var(--card) 100%, transparent);
-
             backdrop-filter: blur(8px);
-            transition: 0.25s ease;
+
             box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
          }
 
          /* =========================
-   BUTTON
+   LAUNCH BUTTON
 ========================= */
-
          .box > button:not(.favorite-btn) {
             width: 100%;
             margin-top: auto;
@@ -312,25 +341,21 @@
                transform 0.12s ease,
                filter 0.12s ease,
                box-shadow 0.12s ease;
-            will-change: transform;
          }
 
-         /* hover = lift */
-         .box button:hover {
+         .box > button:hover {
             transform: translateY(-4px) scale(1.01);
             filter: brightness(1.2);
             box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
          }
 
-         /* click = real “press in” feeling */
-         .box button:active {
+         .box > button:active {
             transform: translateY(2px) scale(0.98);
             filter: brightness(0.9);
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
          }
 
          /* =========================
-   THEME UI
+   THEME BUTTONS
 ========================= */
          .theme-title {
             font-size: 0.8rem;
@@ -365,74 +390,19 @@
                box-shadow 0.2s ease;
          }
 
-         /* hover = ONLY visual change (no movement) */
          .theme-btn:hover {
             border-color: var(--accent1);
             box-shadow: 0 0 0 2px rgba(168, 85, 247, 0.15);
          }
 
-         /* active theme button */
          .theme-btn.active {
             background: linear-gradient(135deg, var(--accent1), var(--accent2));
             color: white;
             border: none;
-            box-shadow: 0 8px 18px rgba(0, 0, 0, 0.25);
          }
 
-         /* click feedback (VERY subtle press, no twitch) */
          .theme-btn:active {
             transform: scale(0.98);
-         }
-         .fav-item {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-
-            padding: 8px;
-            border-radius: 10px;
-            border: 1px solid var(--border);
-
-            background: rgba(0, 0, 0, 0.2);
-            color: var(--muted);
-
-            cursor: pointer;
-            transition: 0.2s;
-         }
-
-         /* ONLY favorites get star */
-         .fav-item {
-            display: block;
-            padding: 8px;
-            border-radius: 10px;
-            border: 1px solid var(--border);
-
-            background: rgba(0, 0, 0, 0.2);
-            color: var(--muted);
-
-            cursor: pointer;
-            transition: 0.2s;
-         }
-
-         .fav-item:hover {
-            transform: translateX(3px);
-            border-color: var(--accent1);
-         }
-         body {
-            transition:
-               background 0.5s ease,
-               color 0.5s ease;
-         }
-
-         .box {
-            transition:
-               transform 0.25s ease,
-               box-shadow 0.25s ease,
-               filter 0.25s ease;
-         }
-
-         .box:hover {
-            transform: translateY(-8px) scale(1.01);
-            filter: brightness(1.15);
          }
       </style>
    </head>
@@ -445,13 +415,8 @@
          <input class="search" id="search" placeholder="Search games..." />
 
          <div class="genres" id="genreBar"></div>
-         <hr
-            style="
-               border: none;
-               border-top: 1px solid rgba(255, 255, 255, 0.1);
-               margin: 10px 0;
-            "
-         />
+
+         <hr class="divider" />
 
          <div class="theme-title">Theme</div>
 
@@ -462,13 +427,8 @@
             <button class="theme-btn" data-theme="toxic">Toxic</button>
             <button class="theme-btn" data-theme="retro">Retro</button>
          </div>
-         <hr
-            style="
-               border: none;
-               border-top: 1px solid rgba(255, 255, 255, 0.1);
-               margin: 10px 0;
-            "
-         />
+
+         <hr class="divider" />
 
          <div class="theme-title">Favorites</div>
          <div class="themes" id="favoritesBar"></div>
@@ -484,6 +444,7 @@
          <div class="container" id="boxContainer"></div>
       </div>
 
+      <!-- ===================== JS ===================== -->
       <script>
          const data = [
             {
@@ -842,10 +803,14 @@
             },
          ];
 
+         /* =========================
+   DOM ELEMENTS
+========================= */
          const container = document.getElementById("boxContainer");
          const search = document.getElementById("search");
          const genreBar = document.getElementById("genreBar");
          const favoritesBar = document.getElementById("favoritesBar");
+         const themeBtns = document.querySelectorAll(".theme-btn");
 
          /* =========================
    STATE
@@ -854,10 +819,8 @@
          let favorites = JSON.parse(localStorage.getItem("favorites")) || [];
 
          /* =========================
-   THEME SYSTEM
+   THEMES
 ========================= */
-         const themeBtns = document.querySelectorAll(".theme-btn");
-
          const themes = {
             void: {
                bg: "linear-gradient(135deg, #05060a, #0b0f1a, #120a1f)",
@@ -910,18 +873,24 @@
             },
          };
 
+         /* =========================
+   THEME SYSTEM
+========================= */
          function applyTheme(name) {
             const t = themes[name] || themes.void;
-
             const root = document.documentElement;
 
-            root.style.setProperty("--bg", t.bg);
-            root.style.setProperty("--card", t.card);
-            root.style.setProperty("--border", t.border);
-            root.style.setProperty("--text", t.text);
-            root.style.setProperty("--muted", t.muted);
-            root.style.setProperty("--accent1", t.accent1);
-            root.style.setProperty("--accent2", t.accent2);
+            Object.entries({
+               "--bg": t.bg,
+               "--card": t.card,
+               "--border": t.border,
+               "--text": t.text,
+               "--muted": t.muted,
+               "--accent1": t.accent1,
+               "--accent2": t.accent2,
+            }).forEach(([key, value]) => {
+               root.style.setProperty(key, value);
+            });
 
             localStorage.setItem("theme", name);
 
@@ -942,10 +911,9 @@
             const prefersDark = window.matchMedia(
                "(prefers-color-scheme: dark)",
             ).matches;
-            return prefersDark ? "dark" : "light";
-         }
 
-         applyTheme(getPreferredTheme());
+            return prefersDark ? "void" : "frost";
+         }
 
          /* =========================
    FAVORITES
@@ -958,33 +926,17 @@
          function toggleFavorite(item) {
             const index = favorites.findIndex((f) => f.name === item.name);
 
-            if (index === -1) {
-               favorites.push(item);
-            } else {
-               favorites.splice(index, 1);
-            }
+            if (index === -1) favorites.push(item);
+            else favorites.splice(index, 1);
 
             saveFavorites();
          }
 
-         function renderFavorites() {
-            favoritesBar.innerHTML = "";
-
-            if (favorites.length === 0) {
-               favoritesBar.innerHTML = `<div style="color:#777;font-size:0.8rem;">No favorites yet</div>`;
-               return;
-            }
-
-            favorites.forEach((item) => {
-               const btn = document.createElement("button");
-               btn.className = "fav-item";
-               btn.textContent = item.name;
-
-               btn.onclick = async () => {
-                  const res = await fetch(item.url);
-                  let html = await res.text();
-
-                  const base = item.url.slice(0, item.url.lastIndexOf("/") + 1);
+         function openGame(url) {
+            fetch(url)
+               .then((res) => res.text())
+               .then((html) => {
+                  const base = url.slice(0, url.lastIndexOf("/") + 1);
 
                   if (/<head/i.test(html)) {
                      html = html.replace(
@@ -998,7 +950,23 @@
                   const w = window.open("about:blank");
                   w.document.write(html);
                   w.document.close();
-               };
+               });
+         }
+
+         function renderFavorites() {
+            favoritesBar.innerHTML = "";
+
+            if (!favorites.length) {
+               favoritesBar.innerHTML = `<div style="color:#777;font-size:0.8rem;">No favorites yet</div>`;
+               return;
+            }
+
+            favorites.forEach((item) => {
+               const btn = document.createElement("button");
+               btn.className = "fav-item";
+               btn.textContent = item.name;
+
+               btn.onclick = () => openGame(item.url);
 
                favoritesBar.appendChild(btn);
             });
@@ -1059,35 +1027,17 @@
             <p>${item.description}</p>
          </div>
 
-         <button>Launch Game</button>
+         <button class="launch-btn">Launch Game</button>
       `;
 
-               const favBtn = box.querySelector(".favorite-btn");
-               favBtn.onclick = (e) => {
+               box.querySelector(".favorite-btn").onclick = (e) => {
                   e.stopPropagation();
                   toggleFavorite(item);
                   applyFilters();
                };
 
-               const launch = box.querySelector("button:not(.favorite-btn)");
-               launch.onclick = async () => {
-                  const res = await fetch(item.url);
-                  let html = await res.text();
-
-                  const base = item.url.slice(0, item.url.lastIndexOf("/") + 1);
-
-                  if (/<head/i.test(html)) {
-                     html = html.replace(
-                        /<head([^>]*)>/i,
-                        `<head$1><base href="${base}">`,
-                     );
-                  } else {
-                     html = `<head><base href="${base}"></head>` + html;
-                  }
-
-                  const w = window.open("about:blank");
-                  w.document.write(html);
-                  w.document.close();
+               box.querySelector(".launch-btn").onclick = () => {
+                  openGame(item.url);
                };
 
                container.appendChild(box);
@@ -1106,9 +1056,10 @@
                   item.description.toLowerCase().includes(q) ||
                   item.genre.toLowerCase().includes(q);
 
-               const ok = activeGenre === "All" || item.genre === activeGenre;
+               const genreMatch =
+                  activeGenre === "All" || item.genre === activeGenre;
 
-               return match && ok;
+               return match && genreMatch;
             });
 
             render(filtered);
@@ -1119,6 +1070,7 @@
          /* =========================
    INIT
 ========================= */
+         applyTheme(getPreferredTheme());
          renderFavorites();
          render(data);
       </script>
