@@ -21,13 +21,25 @@
          }
 
          :root {
-            --bg: linear-gradient(135deg, #0b0b12, #141427, #1a1330);
+            --bg: #0b0b12;
             --card: rgba(20, 20, 35, 0.7);
             --border: rgba(168, 85, 247, 0.25);
             --text: #ffffff;
             --muted: #cbd5e1;
             --accent1: #a855f7;
             --accent2: #6366f1;
+         }
+
+         /* smooth transitions for EVERYTHING theme-related */
+         body,
+         .box,
+         .sidebar,
+         .genre-btn,
+         .theme-btn {
+            transition:
+               background 0.35s ease,
+               color 0.35s ease,
+               border-color 0.35s ease;
          }
 
          /* =========================
@@ -108,11 +120,14 @@
             background: rgba(0, 0, 0, 0.2);
             color: var(--muted);
 
-            transition: 0.2s;
+            transition:
+               transform 0.12s ease,
+               border-color 0.2s ease,
+               background 0.2s ease;
          }
 
          .genre-btn:hover {
-            transform: translateY(-2px);
+            transform: translateY(-2px) scale(1.03);
             border-color: var(--accent1);
          }
 
@@ -121,7 +136,12 @@
             color: var(--text);
             border: none;
             box-shadow: 0 6px 18px rgba(0, 0, 0, 0.25);
+            transform: translateY(1px) scale(0.97);
+            transform: scale(1.05);
          }
+         /* =========================
+   FAVORITES FILTERS
+========================= */
          .favorite-btn {
             width: 22px;
             height: 22px;
@@ -260,11 +280,14 @@
             border-radius: 999px;
             margin-bottom: 8px;
 
-            background: rgba(0, 0, 0, 0.2);
-            color: var(--muted);
             border: 1px solid var(--border);
+            color: var(--muted);
 
-            transition: 0.2s ease;
+            background: color-mix(in srgb, var(--card) 100%, transparent);
+
+            backdrop-filter: blur(8px);
+            transition: 0.25s ease;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
          }
 
          /* =========================
@@ -285,18 +308,25 @@
             background: linear-gradient(135deg, var(--accent1), var(--accent2));
             color: var(--text);
 
-            backdrop-filter: blur(10px);
-            transition: 0.2s ease;
-         }
-         .box button:hover {
-            transform: translateY(-2px);
-            filter: brightness(1.15);
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
+            transition:
+               transform 0.12s ease,
+               filter 0.12s ease,
+               box-shadow 0.12s ease;
+            will-change: transform;
          }
 
+         /* hover = lift */
+         .box button:hover {
+            transform: translateY(-4px) scale(1.01);
+            filter: brightness(1.2);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+         }
+
+         /* click = real “press in” feeling */
          .box button:active {
-            transform: translateY(0px);
-            filter: brightness(0.95);
+            transform: translateY(2px) scale(0.98);
+            filter: brightness(0.9);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
          }
 
          /* =========================
@@ -315,6 +345,10 @@
          }
 
          .theme-btn {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+
             padding: 8px;
             border-radius: 10px;
             border: 1px solid var(--border);
@@ -323,23 +357,31 @@
             color: var(--muted);
 
             cursor: pointer;
-            transition: 0.2s;
+
+            transition:
+               background 0.2s ease,
+               color 0.2s ease,
+               border-color 0.2s ease,
+               box-shadow 0.2s ease;
          }
 
+         /* hover = ONLY visual change (no movement) */
          .theme-btn:hover {
-            transform: translateX(3px);
             border-color: var(--accent1);
+            box-shadow: 0 0 0 2px rgba(168, 85, 247, 0.15);
          }
 
+         /* active theme button */
          .theme-btn.active {
             background: linear-gradient(135deg, var(--accent1), var(--accent2));
             color: white;
             border: none;
+            box-shadow: 0 8px 18px rgba(0, 0, 0, 0.25);
          }
-         .theme-btn {
-            display: flex;
-            align-items: center;
-            gap: 6px;
+
+         /* click feedback (VERY subtle press, no twitch) */
+         .theme-btn:active {
+            transform: scale(0.98);
          }
          .fav-item {
             display: flex;
@@ -375,6 +417,23 @@
             transform: translateX(3px);
             border-color: var(--accent1);
          }
+         body {
+            transition:
+               background 0.5s ease,
+               color 0.5s ease;
+         }
+
+         .box {
+            transition:
+               transform 0.25s ease,
+               box-shadow 0.25s ease,
+               filter 0.25s ease;
+         }
+
+         .box:hover {
+            transform: translateY(-8px) scale(1.01);
+            filter: brightness(1.15);
+         }
       </style>
    </head>
 
@@ -397,9 +456,11 @@
          <div class="theme-title">Theme</div>
 
          <div class="themes" id="themeBar">
-            <button class="theme-btn active" data-theme="dark">Dark</button>
-            <button class="theme-btn" data-theme="light">Light</button>
-            <button class="theme-btn" data-theme="neon">Neon</button>
+            <button class="theme-btn active" data-theme="void">Void</button>
+            <button class="theme-btn" data-theme="inferno">Inferno</button>
+            <button class="theme-btn" data-theme="frost">Frost</button>
+            <button class="theme-btn" data-theme="toxic">Toxic</button>
+            <button class="theme-btn" data-theme="retro">Retro</button>
          </div>
          <hr
             style="
@@ -780,73 +841,115 @@
                image: "https://github.com/CorduroyBrick49/Games/blob/main/Images/2048.jpg?raw=true",
             },
          ];
+
          const container = document.getElementById("boxContainer");
          const search = document.getElementById("search");
          const genreBar = document.getElementById("genreBar");
          const favoritesBar = document.getElementById("favoritesBar");
 
+         /* =========================
+   STATE
+========================= */
          let activeGenre = "All";
          let favorites = JSON.parse(localStorage.getItem("favorites")) || [];
 
-         /* THEME SYSTEM */
+         /* =========================
+   THEME SYSTEM
+========================= */
          const themeBtns = document.querySelectorAll(".theme-btn");
 
          const themes = {
-            dark: {
-               bg: "linear-gradient(135deg, #0b0b12, #141427, #1a1330)",
-               card: "rgba(20, 20, 35, 0.7)",
-               border: "rgba(168, 85, 247, 0.25)",
+            void: {
+               bg: "linear-gradient(135deg, #05060a, #0b0f1a, #120a1f)",
+               card: "rgba(15, 15, 25, 0.8)",
+               border: "rgba(120, 90, 255, 0.25)",
                text: "#ffffff",
-               muted: "#cbd5e1",
-               accent1: "#a855f7",
-               accent2: "#6366f1",
+               muted: "#a9b0c3",
+               accent1: "#7c3aed",
+               accent2: "#2563eb",
             },
-            light: {
-               bg: "linear-gradient(135deg, #f7f8fc, #eef1f7)",
+
+            inferno: {
+               bg: "linear-gradient(135deg, #1a0000, #2a0a0a, #3b0b00)",
+               card: "rgba(40, 10, 10, 0.75)",
+               border: "rgba(255, 80, 0, 0.35)",
+               text: "#ffe6d5",
+               muted: "#ffb38a",
+               accent1: "#ff3b30",
+               accent2: "#ff9500",
+            },
+
+            frost: {
+               bg: "linear-gradient(135deg, #dbeafe, #e0f2fe, #f0f9ff)",
                card: "rgba(255, 255, 255, 0.75)",
-               border: "rgba(99, 102, 241, 0.15)",
-               text: "#1f2937",
-               muted: "#4b5563",
-               accent1: "#6366f1",
-               accent2: "#8b5cf6",
+               border: "rgba(59, 130, 246, 0.2)",
+               text: "#0f172a",
+               muted: "#475569",
+               accent1: "#38bdf8",
+               accent2: "#0ea5e9",
             },
-            neon: {
-               bg: "linear-gradient(135deg, #050508, #0b0b12)",
-               card: "rgba(10, 15, 25, 0.75)",
-               border: "rgba(0, 255, 255, 0.25)",
-               text: "#e2ffff",
-               muted: "#7ffcff",
-               accent1: "#00f5ff",
-               accent2: "#ff3df2",
+
+            toxic: {
+               bg: "linear-gradient(135deg, #020b06, #041a10, #0b2a14)",
+               card: "rgba(10, 25, 15, 0.85)",
+               border: "rgba(0, 255, 120, 0.3)",
+               text: "#d6ffe7",
+               muted: "#86f7b3",
+               accent1: "#00ff7b",
+               accent2: "#00d4ff",
+            },
+
+            retro: {
+               bg: "linear-gradient(135deg, #1a0033, #2b0a3d, #0a0a1f)",
+               card: "rgba(20, 10, 40, 0.85)",
+               border: "rgba(255, 0, 200, 0.3)",
+               text: "#ffe6ff",
+               muted: "#ff9bf0",
+               accent1: "#ff00cc",
+               accent2: "#00e5ff",
             },
          };
 
          function applyTheme(name) {
-            const t = themes[name];
+            const t = themes[name] || themes.void;
 
-            document.documentElement.style.setProperty("--bg", t.bg);
-            document.documentElement.style.setProperty("--card", t.card);
-            document.documentElement.style.setProperty("--border", t.border);
-            document.documentElement.style.setProperty("--text", t.text);
-            document.documentElement.style.setProperty("--muted", t.muted);
-            document.documentElement.style.setProperty("--accent1", t.accent1);
-            document.documentElement.style.setProperty("--accent2", t.accent2);
+            const root = document.documentElement;
+
+            root.style.setProperty("--bg", t.bg);
+            root.style.setProperty("--card", t.card);
+            root.style.setProperty("--border", t.border);
+            root.style.setProperty("--text", t.text);
+            root.style.setProperty("--muted", t.muted);
+            root.style.setProperty("--accent1", t.accent1);
+            root.style.setProperty("--accent2", t.accent2);
 
             localStorage.setItem("theme", name);
 
             themeBtns.forEach((b) => b.classList.remove("active"));
             document
                .querySelector(`[data-theme="${name}"]`)
-               .classList.add("active");
+               ?.classList.add("active");
          }
 
          themeBtns.forEach((btn) => {
             btn.onclick = () => applyTheme(btn.dataset.theme);
          });
 
-         applyTheme(localStorage.getItem("theme") || "dark");
+         function getPreferredTheme() {
+            const saved = localStorage.getItem("theme");
+            if (saved && themes[saved]) return saved;
 
-         /* FAVORITES */
+            const prefersDark = window.matchMedia(
+               "(prefers-color-scheme: dark)",
+            ).matches;
+            return prefersDark ? "dark" : "light";
+         }
+
+         applyTheme(getPreferredTheme());
+
+         /* =========================
+   FAVORITES
+========================= */
          function saveFavorites() {
             localStorage.setItem("favorites", JSON.stringify(favorites));
             renderFavorites();
@@ -874,10 +977,7 @@
 
             favorites.forEach((item) => {
                const btn = document.createElement("button");
-
-               // 👇 IMPORTANT: separate class
                btn.className = "fav-item";
-
                btn.textContent = item.name;
 
                btn.onclick = async () => {
@@ -904,7 +1004,9 @@
             });
          }
 
-         /* GENRES */
+         /* =========================
+   GENRES
+========================= */
          const genres = ["All", ...new Set(data.map((g) => g.genre))];
 
          genres.forEach((g) => {
@@ -918,6 +1020,7 @@
                document
                   .querySelectorAll(".genre-btn")
                   .forEach((b) => b.classList.remove("active"));
+
                btn.classList.add("active");
                activeGenre = g;
                applyFilters();
@@ -926,7 +1029,9 @@
             genreBar.appendChild(btn);
          });
 
-         /* RENDER */
+         /* =========================
+   RENDER GAMES
+========================= */
          function render(list) {
             container.innerHTML = "";
 
@@ -988,7 +1093,10 @@
                container.appendChild(box);
             });
          }
-         /* FILTERS */
+
+         /* =========================
+   FILTERS
+========================= */
          function applyFilters() {
             const q = search.value.toLowerCase();
 
@@ -1008,6 +1116,9 @@
 
          search.addEventListener("input", applyFilters);
 
+         /* =========================
+   INIT
+========================= */
          renderFavorites();
          render(data);
       </script>
