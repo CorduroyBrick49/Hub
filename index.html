@@ -415,6 +415,52 @@
          .theme-btn:active {
             transform: scale(0.98);
          }
+         /*============== Loading Screen================*/
+         #loading-screen {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
+  background: rgba(5, 10, 20, 0.9);
+  backdrop-filter: blur(10px);
+
+  color: var(--text);
+  font-size: 18px;
+
+  z-index: 9999;
+
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.25s ease;
+}
+
+#loading-screen.active {
+  opacity: 1;
+  pointer-events: all;
+}
+
+.loader {
+  width: 50px;
+  height: 50px;
+  border: 4px solid rgba(255, 255, 255, 0.2);
+  border-top: 4px solid var(--accent1);
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin-bottom: 12px;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
       </style>
    </head>
 
@@ -454,7 +500,10 @@
 
          <div class="container" id="boxContainer"></div>
       </div>
-
+		<div id="loading-screen">
+  			<div class="loader"></div>
+  				<p>Launching game...</p>
+		</div>
       <!-- ===================== JS ===================== -->
       <script>
          const data = [
@@ -1040,25 +1089,40 @@ frost: {
          }
 
          function openGame(url) {
-            fetch(url)
-               .then((res) => res.text())
-               .then((html) => {
-                  const base = url.slice(0, url.lastIndexOf("/") + 1);
+  const loader = document.getElementById("loading-screen");
 
-                  if (/<head/i.test(html)) {
-                     html = html.replace(
-                        /<head([^>]*)>/i,
-                        `<head$1><base href="${base}">`,
-                     );
-                  } else {
-                     html = `<head><base href="${base}"></head>` + html;
-                  }
+  // Show loading screen
+  loader.classList.add("active");
 
-                  const w = window.open("about:blank");
-                  w.document.write(html);
-                  w.document.close();
-               });
-         }
+  // Small delay so user actually sees it
+  setTimeout(() => {
+    fetch(url)
+      .then((res) => res.text())
+      .then((html) => {
+        const base = url.slice(0, url.lastIndexOf("/") + 1);
+
+        if (/<head/i.test(html)) {
+          html = html.replace(
+            /<head([^>]*)>/i,
+            `<head$1><base href="${base}">`
+          );
+        } else {
+          html = `<head><base href="${base}"></head>` + html;
+        }
+
+        const w = window.open("about:blank");
+        w.document.write(html);
+        w.document.close();
+
+        // Hide loader after opening
+        loader.classList.remove("active");
+      })
+      .catch(() => {
+        loader.classList.remove("active");
+        alert("Failed to load game.");
+      });
+  }, 400); // tweak delay (300–700ms feels best)
+}
 
          function renderFavorites() {
             favoritesBar.innerHTML = "";
