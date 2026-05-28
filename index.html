@@ -66,24 +66,15 @@
          .sidebar {
          width: 270px;
          padding: 20px;
-         position: fixed;
+         position: sticky;
          top: 0;
-         right: 0; /* since you moved button right */
          height: 100vh;
          background: var(--card);
          backdrop-filter: blur(14px);
-         border-left: 1px solid var(--border);
+         border-right: 1px solid var(--border);
          display: flex;
          flex-direction: column;
          gap: 12px;
-         transform: translateX(100%);
-         transition: transform 0.35s ease;
-         z-index: 1000;
-         pointer-events: none; 
-         }
-         .sidebar.open {
-         transform: translateX(0);
-         pointer-events: all; 
          }
          .logo {
          font-size: 1.8rem;
@@ -188,12 +179,12 @@
          inset: 0;
          background: linear-gradient(
          135deg,
-         color-mix(in srgb, var(--accent1) 20%, transparent),
-         color-mix(in srgb, var(--accent2) 15%, transparent),
-         var(--overlay)
+         color-mix(in srgb, var(--accent1) 35%, transparent),
+         color-mix(in srgb, var(--accent2) 25%, transparent),
+         rgba(0, 0, 0, 0.55)
          );
-         mix-blend-mode: normal;
-         opacity: 0.7;
+         mix-blend-mode: multiply;
+         opacity: 0.9;
          }
          /* keep content above overlay */
          .box * {
@@ -441,24 +432,6 @@
          opacity: 0;
          transform: translateX(-50%) translateY(10px);
          }
-         /*==============MENU TOGGLE===================*/
-         #menuToggle {
-         position: fixed;
-         top: 20px;
-         right: 20px;
-         z-index: 2000; 
-         font-size: 20px;
-         padding: 10px 14px;
-         border-radius: 10px;
-         border: 1px solid var(--border);
-         background: var(--card);
-         color: var(--text);
-         cursor: pointer;
-         }
-         #menuToggle:hover {
-         transform: scale(1.05);
-         border-color: var(--accent1);
-         }
       </style>
    </head>
    <body>
@@ -479,7 +452,6 @@
       </div>
       <!-- MAIN -->
       <div class="main">
-         <button id="menuToggle">☰</button>
          <div class="header">
             <h1>Game Hub</h1>
             <p>Search, filter, and launch instantly</p>
@@ -961,17 +933,7 @@
          const genreBar = document.getElementById("genreBar");
          const favoritesBar = document.getElementById("favoritesBar");
          const themeBtns = document.querySelectorAll(".theme-btn");
-         const sidebar = document.querySelector(".sidebar");
-         const menuToggle = document.getElementById("menuToggle");
          
-         menuToggle.onclick = () => {
-         sidebar.classList.toggle("open");
-         };
-         document.addEventListener("click", (e) => {
-         if (!sidebar.contains(e.target) && !menuToggle.contains(e.target)) {
-         sidebar.classList.remove("open");
-         }
-         });
          /* =========================
          STATE
          ========================= */
@@ -1007,14 +969,15 @@
          cardText: "#ffffff"
          }
          };
+         
          /* =========================
          THEME SYSTEM
          ========================= */
          function applyTheme(name) {
-            const t = themes[name] || themes.dark;
+            const t = themes[name] || themes.void;
             const root = document.documentElement;
          
-            const vars = {
+           const vars = {
                "--bg": t.bg,
                "--card": t.card,
                "--border": t.border,
@@ -1123,47 +1086,36 @@
          GAME LAUNCHER
          ========================= */
          function openGame(url) {
-         const loader = document.getElementById("loading-screen");
+            const loader = document.getElementById("loading-screen");
          
-         // Open immediately while still inside the click event.
-         const gameWindow = window.open("about:blank", "_blank");
+            loader.classList.add("active");
          
-         if (!gameWindow) {
-         alert("Popup blocked. Please allow popups for this site.");
-         return;
-         }
+            setTimeout(() => {
+               fetch(url)
+                  .then((res) => res.text())
+                  .then((html) => {
+                     const base = url.slice(0, url.lastIndexOf("/") + 1);
          
-         loader.classList.add("active");
-         gameWindow.document.write("<p>Loading game...</p>");
+                     if (/<head/i.test(html)) {
+                        html = html.replace(
+                           /<head([^>]*)>/i,
+                           `<head$1><base href="${base}">`,
+                        );
+                     } else {
+                        html = `<head><base href="${base}"></head>` + html;
+                     }
          
-         fetch(url)
-         .then((res) => {
-         if (!res.ok) throw new Error("Failed to fetch game");
-         return res.text();
-         })
-         .then((html) => {
-         const base = url.slice(0, url.lastIndexOf("/") + 1);
+                     const w = window.open("about:blank");
+                     w.document.write(html);
+                     w.document.close();
          
-         if (/<head/i.test(html)) {
-            html = html.replace(
-               /<head([^>]*)>/i,
-               `<head$1><base href="${base}">`
-            );
-         } else {
-            html = `<head><base href="${base}"></head>` + html;
-         }
-         
-         gameWindow.document.open();
-         gameWindow.document.write(html);
-         gameWindow.document.close();
-         
-         loader.classList.remove("active");
-         })
-         .catch((err) => {
-         loader.classList.remove("active");
-         gameWindow.document.body.innerHTML = "<h2>Failed to load game.</h2>";
-         console.error(err);
-         });
+                     loader.classList.remove("active");
+                  })
+                  .catch(() => {
+                     loader.classList.remove("active");
+                     alert("Failed to load game.");
+                  });
+            }, 400);
          }
          
          /* =========================
